@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Google Regression Suite">
+
+	<test name="Google Search 1.0" enabled="true">
+
+		<classes>
+			<class name="com.google.TestCases.SampleTC">
+			</class>
+		</classes>
+
+
+
+	</test>
+
+
+
+</suite>

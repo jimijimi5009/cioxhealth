@@ -1,0 +1,9 @@
+[
+	{
+		"Browser": "Chrome",
+		"Application":"WEB",
+		"SearchData":"how to be a good automation test engineer",
+		"ExpectedResult":"7 Quick Steps to Become a Great Automation Testing Engineer",
+		"Environment":"QA"
+	}
+]

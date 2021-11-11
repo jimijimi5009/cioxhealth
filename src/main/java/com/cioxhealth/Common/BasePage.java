@@ -4,8 +4,8 @@
 package com.cioxhealth.Common;
 
 import com.aventstack.extentreports.ExtentTest;
-import com.google.Reporter.ExtentReportTool;
-import com.google.Utilities.ReadPropertiesFile;
+import com.cioxhealth.Reporter.ExtentReportTool;
+import com.cioxhealth.Utilities.ReadPropertiesFile;
 import org.json.simple.parser.ParseException;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
@@ -49,5 +49,6 @@ public class BasePage {
 		extent.saveReport();
 
 	}
+
 
 }

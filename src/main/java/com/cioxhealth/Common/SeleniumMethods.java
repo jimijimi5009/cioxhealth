@@ -1,14 +1,18 @@
 package com.cioxhealth.Common;
 
-import com.google.Utilities.JsonTool;
-import com.google.Utilities.ReadPropertiesFile;
+
+import com.cioxhealth.Utilities.JsonTool;
+import com.cioxhealth.Utilities.ReadPropertiesFile;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.SystemUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -35,8 +39,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
-import java.util.*;
 
 
 public class SeleniumMethods extends BasePage {
@@ -60,7 +66,7 @@ public class SeleniumMethods extends BasePage {
 	public static String getEnvironment() {
 		String env = null;
 		try {
-			String jsonFilePath = System.getProperty("user.dir") +"/src/test/resources/TestData/TestData.json";
+			String jsonFilePath = System.getProperty("user.dir") +"/src/test/resources/TestData/EnvironmentData.json";
 			JSONObject jsonObject = JsonTool.readJson(jsonFilePath);
 			env = (String) jsonObject.get("Environment");
 			if (env != null) {
@@ -84,8 +90,8 @@ public class SeleniumMethods extends BasePage {
 				setChromeDriverForMac();
 			}
 			break;
-		case "ie":
-			setIEDriver();
+		case "edge":
+			setEdgeDriver();
 			break;
 		default:
 			System.out.println(browserType + " is not a supported browser");
@@ -128,6 +134,15 @@ public class SeleniumMethods extends BasePage {
 		return driver;
 	}
 
+	public static WebDriver setFirefoxDriver() {
+
+
+		WebDriverManager.firefoxdriver().setup();
+		driver = new FirefoxDriver();
+		System.out.println("Starting FireFox browser");
+		return driver;
+	}
+
 	public static WebDriver setIEDriver() {
 
 		InternetExplorerOptions options = new InternetExplorerOptions();
@@ -139,9 +154,17 @@ public class SeleniumMethods extends BasePage {
 		return driver;
 	}
 
+	public static WebDriver setEdgeDriver() {
+
+		WebDriverManager.edgedriver().setup();
+		driver = new EdgeDriver();
+		System.out.println("Starting Edge browser");
+		return driver;
+	}
+
 	public static void startWebApp()
 			throws AWTException, InterruptedException, IOException, ParseException {
-		String jsonFilePath = System.getProperty("user.dir") +"/src/test/resources/TestData/TestData.json";
+		String jsonFilePath = System.getProperty("user.dir") +"/src/test/resources/TestData/EnvironmentData.json";
 		JSONObject jsonObject = JsonTool.readJson(jsonFilePath);
 		String env = getEnvironment();
 		String browser = (String) jsonObject.get("Browser");
@@ -184,26 +207,24 @@ public class SeleniumMethods extends BasePage {
 		String cmdString[] = null;
 
 		switch (appName.toLowerCase()) {
-		case "chrome":
-			cmdString = new String[] { "chrome.exe", "chromedriver.exe" };
-			break;
-		case "ie":
-			cmdString = new String[] { "iexplore.exe", "IEDriverServer.exe" };
-			break;
-		case "intake98":
-		case "provider98":
-		case "reportworx":
-		case "eligible2000":
-		case "smsportal":
-		case "cignaportal":
-			cmdString = new String[] { "mstsc.exe" };
-			break;
-		case "notepad":
-			cmdString = new String[] { "notepad.exe", "Winium.Desktop.Driver.exe" };
-			break;
-		default:
-			cmdString = new String[] { appName };
-			break;
+			case "chrome":
+				cmdString = new String[] { "chrome.exe", "chromedriver.exe" };
+				break;
+			case "ie":
+				cmdString = new String[] { "iexplore.exe", "IEDriverServer.exe" };
+				break;
+			case "edge":
+				cmdString = new String[] { "msedge.exe", "msedgedriver.exe" };
+				break;
+			case "cignaportal":
+				cmdString = new String[] { "mstsc.exe" };
+				break;
+			case "notepad":
+				cmdString = new String[] { "notepad.exe", "Winium.Desktop.Driver.exe" };
+				break;
+			default:
+				cmdString = new String[] { appName };
+				break;
 		}
 
 		Process process = null;
@@ -220,26 +241,26 @@ public class SeleniumMethods extends BasePage {
 		}
 	}
 
-	public static String encryptedPassword(String passWord){
-
-		byte[] encodedString = new byte[0];
-		try {
-			encodedString = Base64.encodeBase64(passWord.getBytes());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return(new String(encodedString));
-	}
-	public static String decryptedPassword(String passWord){
-
-		byte[] decodedString = new byte[0];
-		try {
-			 decodedString = Base64.decodeBase64(passWord);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return(new String(decodedString));
-	}
+//	public static String encryptedPassword(String passWord){
+//
+//		byte[] encodedString = new byte[0];
+//		try {
+//			encodedString = Base64.encodeBase64(passWord.getBytes());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return(new String(encodedString));
+//	}
+//	public static String decryptedPassword(String passWord){
+//
+//		byte[] decodedString = new byte[0];
+//		try {
+//			 decodedString = Base64.decodeBase64(passWord);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return(new String(decodedString));
+//	}
 
 	public static String currentDateTime(String currentDateTimePattern) {
 		LocalDateTime datetime = LocalDateTime.now();
@@ -403,6 +424,16 @@ public class SeleniumMethods extends BasePage {
 		}
 	}
 
+	public static String decryptedPassword(String passWord){
+
+		byte[] decodedString = new byte[0];
+		try {
+			decodedString = Base64.decodeBase64(passWord);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return(new String(decodedString));
+	}
 	public static String interpretDate(String testData) {
 		String setDate = null;
 		int tempDate = 0;

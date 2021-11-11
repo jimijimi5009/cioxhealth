@@ -6,7 +6,7 @@ package com.cioxhealth.Reporter;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.JsonFormatter;
-import com.google.Common.BasePage;
+import com.cioxhealth.Common.BasePage;
 
 import java.io.File;
 import java.io.IOException;
